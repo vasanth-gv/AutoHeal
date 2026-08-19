@@ -32,7 +32,7 @@ pipeline {
                 bat '''
                     docker stop autoheal-app || exit 0
                     docker rm autoheal-app || exit 0
-                    docker run -d -p 5000:5000 --name autoheal-app autoheal:1.0
+                    docker run -d --restart unless-stopped --name autoheal-app -p 5000:5000 autoheal:1.0
                 '''
             }
         }
