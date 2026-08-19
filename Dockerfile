@@ -14,7 +14,7 @@ ENV APP_VERSION=1.0.0
 
 EXPOSE 5000
 
-HEALTHCHECK --interval=10s --timeout=5s --start-period=10s --retries=3 \
-  CMD wget --no-verbose --tries=1 --spider http://localhost:5000/health || exit 1
+HEALTHCHECK --interval=10s --timeout=5s --start-period=15s --retries=3 \
+  CMD wget --no-verbose --tries=1 --spider http://127.0.0.1:5000/health || exit 1
 
 CMD ["node", "src/server.js"]
