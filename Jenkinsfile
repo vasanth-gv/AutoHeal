@@ -2,7 +2,6 @@ pipeline {
     agent any
 
     stages {
-
         stage('Checkout') {
             steps {
                 checkout scm
@@ -11,40 +10,20 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                bat 'npm install'
+                sh 'npm install'
             }
         }
 
-        stage('Run Jest Tests') {
+        stage('Test') {
             steps {
-                bat 'npm test -- --runInBand'
+                sh 'npm test -- --runInBand'
             }
         }
 
-        stage('Build Docker Image') {
+        stage('Docker Build') {
             steps {
-                bat 'docker build -t autoheal:1.0 .'
+                sh 'docker build -t autoheal:latest .'
             }
-        }
-
-        stage('Deploy Docker Container') {
-            steps {
-                bat '''
-                    docker stop autoheal-app || exit 0
-                    docker rm autoheal-app || exit 0
-                    docker run -d --restart unless-stopped --name autoheal-app -p 5000:5000 autoheal:1.0
-                '''
-            }
-        }
-    }
-
-    post {
-        success {
-            echo 'AutoHeal CI/CD Pipeline completed successfully!'
-        }
-
-        failure {
-            echo 'AutoHeal Pipeline failed!'
         }
     }
 }
